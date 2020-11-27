@@ -498,7 +498,8 @@ events.listen('recipes', function (e) {
     ])
 
     //Botanypots tree functions
-    function growTree(mod, name, extra) {
+    //additional args will be appended to results property
+    function growTree(mod, name) {
         var tree = {
             seed: {
                 item: mod + ':' + name + '_sapling'
@@ -511,13 +512,13 @@ events.listen('recipes', function (e) {
                 block: mod + ':' + name + '_sapling'
             },
             results: [{
-                chance: 0.5,
-                output: {
-                    item: mod + ':' + name + '_log'
+                    chance: 0.5,
+                    output: {
+                        item: mod + ':' + name + '_log'
+                    },
+                    minRolls: 1,
+                    maxRolls: 1
                 },
-                minRolls: 1,
-                maxRolls: 1
-            },
                 {
                     chance: 0.1,
                     output: {
@@ -536,14 +537,21 @@ events.listen('recipes', function (e) {
                 },
             ]
         };
-        if(extra !== undefined)
+        //extra args support
+        if(arguments.length > 2)
         {
-            Object.assign(tree, extra);
+            let n = 2;
+
+            while (n < arguments.length) {
+                tree.results.push(arguments[n]);
+                n++;
+            }
         }
         e.recipes.botanypots.crop(tree).id('kubejs:botany_pots/crop/' + mod + '/' + name)
     }
 
-    function growTreeSnowflake(mod, name, extra) {
+    //additional args will be appended to results property
+    function growTreeSnowflake(mod, name) {
         var treeSnowflake = {
             seed: {
                 item: mod + ':' + name + '_sapling'
@@ -556,13 +564,13 @@ events.listen('recipes', function (e) {
                 block: mod + ':' + name + '_sapling'
             },
             results: [{
-                chance: 0.1,
-                output: {
-                    item: 'minecraft:stick'
+                    chance: 0.1,
+                    output: {
+                        item: 'minecraft:stick'
+                    },
+                    minRolls: 1,
+                    maxRolls: 2
                 },
-                minRolls: 1,
-                maxRolls: 2
-            },
                 {
                     chance: 0.05,
                     output: {
@@ -573,9 +581,16 @@ events.listen('recipes', function (e) {
                 },
             ]
         };
-        if(extra !== undefined)
+
+        //extra args support
+        if(arguments.length > 2)
         {
-            Object.assign(treeSnowflake, extra);
+            let n = 2;
+
+            while (n < arguments.length) {
+                treeSnowflake.results.push(arguments[n]);
+                n++;
+            }
         }
         e.recipes.botanypots.crop(treeSnowflake).id('kubejs:botany_pots/crop/' + mod + '/' + name)
     }
